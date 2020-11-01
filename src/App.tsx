@@ -13,8 +13,9 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchCities({ offset: 0, limit: 10, filter }));
-  }, [filter]);
+  }, [filter, dispatch]);
 
+  // eslint-disable-next-line
   const onFilterChanged = useCallback(
     throttle((filter: string) => dispatch(setFilter(filter)), 500),
     []
