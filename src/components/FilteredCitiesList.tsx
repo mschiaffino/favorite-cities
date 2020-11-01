@@ -10,6 +10,7 @@ import {
   filteredResultsSelector,
   fetchCities,
 } from '../store/citiesSlice';
+import CityListItem from './CityListItem';
 
 export default function FilteredCitiesList() {
   const dispatch = useDispatch();
@@ -56,11 +57,7 @@ export default function FilteredCitiesList() {
           ref={ref}
           width="100%"
         >
-          {({ index, style }) => (
-            <div className="ListItem" style={style}>
-              {index}
-            </div>
-          )}
+          {CityListItem}
         </List>
       )}
     </InfiniteLoader>
