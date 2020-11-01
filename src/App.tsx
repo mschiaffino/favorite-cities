@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import throttle from 'lodash.throttle';
 
 import './App.css';
 import { setFilter, filterSelector, fetchCities } from './store/citiesSlice';
@@ -13,9 +15,10 @@ function App() {
     dispatch(fetchCities({ offset: 0, limit: 10, filter }));
   }, [filter]);
 
-  const onFilterChanged = (filter: string) => {
-    dispatch(setFilter(filter));
-  };
+  const onFilterChanged = useCallback(
+    throttle((filter: string) => dispatch(setFilter(filter)), 500),
+    []
+  );
 
   return (
     <div>
