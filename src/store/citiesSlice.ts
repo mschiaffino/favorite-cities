@@ -28,3 +28,5 @@ export const citiesSlice = createSlice({
     setFilter: setFilterReducer,
   },
 });
+
+export const { setFilter } = citiesSlice.actions;
