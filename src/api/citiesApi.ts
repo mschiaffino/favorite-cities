@@ -1,7 +1,12 @@
 import { ApiResponse } from '../types';
 
 function fetchCities(offset = 0, limit = 1): Promise<ApiResponse> {
-  return makeRequest(`/cities?offset=${offset}&limit=${limit}`);
+  const path = `/cities?offset=${offset}&limit=${limit}`;
+
+  return makeRequest(path).catch(() => {
+    //Retry
+    return fetchCities(offset, limit);
+  });
 }
 
 function makeRequest(path: string, method: string = 'GET', data: any = null) {
