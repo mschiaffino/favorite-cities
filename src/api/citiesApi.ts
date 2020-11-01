@@ -1,11 +1,19 @@
 import { ApiResponse } from '../types';
 
-function fetchCities(offset = 0, limit = 1): Promise<ApiResponse> {
-  const path = `/cities?offset=${offset}&limit=${limit}`;
+function fetchCities(
+  offset = 0,
+  limit = 1,
+  filter?: string
+): Promise<ApiResponse> {
+  let path = `/cities?offset=${offset}&limit=${limit}`;
+
+  if (filter) {
+    path += `&filter=${filter}`;
+  }
 
   return makeRequest(path).catch(() => {
     //Retry
-    return fetchCities(offset, limit);
+    return fetchCities(offset, limit, filter);
   });
 }
 

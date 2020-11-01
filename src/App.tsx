@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { citiesApi } from './api/citiesApi';
-import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
 
+import './App.css';
+import { citiesApi } from './api/citiesApi';
+import { setFilter, filterSelector } from './store/citiesSlice';
 import FilterInput from './components/FilterInput';
-import { setFilter } from './store/citiesSlice';
 
 function App() {
   const dispatch = useDispatch();
+  const filter = useSelector(filterSelector);
 
   useEffect(() => {
-    citiesApi.fetchCities();
-  }, []);
+    citiesApi.fetchCities(0, 10, filter);
+  }, [filter]);
 
   const onFilterChanged = (filter: string) => {
     dispatch(setFilter(filter));
