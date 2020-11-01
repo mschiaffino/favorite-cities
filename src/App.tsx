@@ -10,7 +10,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(' hola');
     citiesApi.fetchCities();
   }, []);
 
