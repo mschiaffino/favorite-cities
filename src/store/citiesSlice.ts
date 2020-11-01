@@ -1,4 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+
+import { RootState } from '.';
+
+const sliceName = 'cities';
 
 type citiesSliceState = {
   filter: string;
@@ -22,7 +26,7 @@ export const setFilterReducer = (
 };
 
 export const citiesSlice = createSlice({
-  name: 'cities',
+  name: sliceName,
   initialState,
   reducers: {
     setFilter: setFilterReducer,
@@ -30,3 +34,6 @@ export const citiesSlice = createSlice({
 });
 
 export const { setFilter } = citiesSlice.actions;
+
+export const filterSelector = (rootState: RootState) =>
+  rootState[sliceName].filter;

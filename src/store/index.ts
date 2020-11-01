@@ -7,3 +7,5 @@ export const store = configureStore({
     [citiesSlice.name]: citiesSlice.reducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;

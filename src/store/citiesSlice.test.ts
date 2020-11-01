@@ -1,4 +1,4 @@
-import { setFilterReducer } from './citiesSlice';
+import { filterSelector, setFilterReducer } from './citiesSlice';
 
 describe('citiesSlice', () => {
   describe('setFilterReducer', () => {
@@ -9,6 +9,14 @@ describe('citiesSlice', () => {
       const updatedState = setFilterReducer(initialState, actionPayload);
 
       expect(updatedState).toEqual({ filter: 'Argentina' });
+    });
+  });
+
+  describe('filterSelector', () => {
+    test('should return filter value', () => {
+      const rootState = { cities: { filter: 'Buenos Aires' } };
+
+      expect(filterSelector(rootState)).toBe('Buenos Aires');
     });
   });
 });
