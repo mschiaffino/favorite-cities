@@ -113,4 +113,9 @@ export const totalSelector = (rootState: RootState) => {
   return rootState.cities.filteredResults[currentFilter].total;
 };
 
+export const filteredResultsSelector = (rootState: RootState) => {
+  const currentFilter = rootState[sliceName].filter;
+  return rootState.cities.filteredResults[currentFilter].geoNameIds;
+};
+
 // #endregion Selectors

@@ -1,5 +1,6 @@
 import {
   fetchCitiesFulfilledReducer,
+  filteredResultsSelector,
   filterSelector,
   setFilterReducer,
   totalSelector,
@@ -156,19 +157,38 @@ describe('citiesSlice', () => {
       });
     });
 
-    test('should return the total count for curren filter', () => {
-      const rootState = {
-        cities: {
-          filter: 'bue',
-          filteredResults: {
-            arg: { geoNameIds: [], total: 1000 },
-            bue: { geoNameIds: [], total: 100 },
+    describe('totalSelector', () => {
+      test('should return the total count for curren filter', () => {
+        const rootState = {
+          cities: {
+            filter: 'bue',
+            filteredResults: {
+              arg: { geoNameIds: [], total: 1000 },
+              bue: { geoNameIds: [], total: 100 },
+            },
+            cities: {},
           },
-          cities: {},
-        },
-      };
+        };
 
-      expect(totalSelector(rootState)).toBe(100);
+        expect(totalSelector(rootState)).toBe(100);
+      });
+    });
+
+    describe('filteredResultsSelector', () => {
+      test('should return filtered results for current filter', () => {
+        const rootState = {
+          cities: {
+            filter: 'arg',
+            filteredResults: {
+              arg: { geoNameIds: [1, 2, 3, 4, 5], total: 1000 },
+              bue: { geoNameIds: [8, 9, 10, 15, 30], total: 100 },
+            },
+            cities: {},
+          },
+        };
+
+        expect(filteredResultsSelector(rootState)).toEqual([1, 2, 3, 4, 5]);
+      });
     });
   });
 });
