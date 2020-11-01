@@ -24,7 +24,7 @@ export default function CityListItem({
   return (
     <ListItem button style={style} key={index} className={classes.listItem}>
       <ListItemText
-        primary={city?.name}
+        primary={city?.name || 'Loading...'}
         secondary={city ? `${city.subcountry} - ${city.country} ` : undefined}
       />
     </ListItem>
