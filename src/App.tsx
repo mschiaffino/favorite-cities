@@ -6,6 +6,7 @@ import throttle from 'lodash.throttle';
 import './App.css';
 import { setFilter, filterSelector, fetchCities } from './store/citiesSlice';
 import FilterInput from './components/FilterInput';
+import FilteredCitiesList from './components/FilteredCitiesList';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ function App() {
     <div>
       <h1>Favorite Cities App</h1>
       <FilterInput onFilterChanged={onFilterChanged} />
+      <FilteredCitiesList />
     </div>
   );
 }
