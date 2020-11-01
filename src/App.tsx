@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { citiesApi } from './api/citiesApi';
 import './App.css';
 
 import FilterInput from './components/FilterInput';
@@ -7,6 +8,11 @@ import { setFilter } from './store/citiesSlice';
 
 function App() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(' hola');
+    citiesApi.fetchCities();
+  }, []);
 
   const onFilterChanged = (filter: string) => {
     dispatch(setFilter(filter));
