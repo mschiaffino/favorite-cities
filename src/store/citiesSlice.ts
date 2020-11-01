@@ -110,12 +110,19 @@ export const filterSelector = (rootState: RootState) =>
 
 export const totalSelector = (rootState: RootState) => {
   const currentFilter = rootState[sliceName].filter;
-  return rootState.cities.filteredResults[currentFilter].total;
+  return rootState[sliceName].filteredResults[currentFilter]?.total;
 };
 
 export const filteredResultsSelector = (rootState: RootState) => {
   const currentFilter = rootState[sliceName].filter;
-  return rootState.cities.filteredResults[currentFilter].geoNameIds;
+  return rootState[sliceName].filteredResults[currentFilter]?.geoNameIds;
+};
+
+export const cityByIndexSelector = (index: number) => (
+  rootState: RootState
+) => {
+  const geoNameId = filteredResultsSelector(rootState)[index];
+  return rootState[sliceName].cities[geoNameId];
 };
 
 // #endregion Selectors

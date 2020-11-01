@@ -1,4 +1,5 @@
 import {
+  cityByIndexSelector,
   fetchCitiesFulfilledReducer,
   filteredResultsSelector,
   filterSelector,
@@ -188,6 +189,34 @@ describe('citiesSlice', () => {
         };
 
         expect(filteredResultsSelector(rootState)).toEqual([1, 2, 3, 4, 5]);
+      });
+    });
+
+    describe('cityByIndexSelector', () => {
+      test('should return the right city', () => {
+        const bahiaCityInfo = {
+          country: 'Argentina',
+          geonameid: 3865086,
+          name: 'Bahía Blanca',
+          subcountry: 'Buenos Aires',
+        };
+
+        const rootState = {
+          cities: {
+            filter: 'arg',
+            filteredResults: {
+              arg: {
+                geoNameIds: [1, 2, bahiaCityInfo.geonameid, 4, 5],
+                total: 1000,
+              },
+            },
+            cities: {
+              [bahiaCityInfo.geonameid]: bahiaCityInfo,
+            },
+          },
+        };
+
+        expect(cityByIndexSelector(2)(rootState)).toEqual(bahiaCityInfo);
       });
     });
   });
