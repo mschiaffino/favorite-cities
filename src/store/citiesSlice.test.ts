@@ -2,6 +2,7 @@ import {
   fetchCitiesFulfilledReducer,
   filterSelector,
   setFilterReducer,
+  totalSelector,
 } from './citiesSlice';
 
 const fetchCitiesMockResponse = {
@@ -79,74 +80,95 @@ const fetchCitiesMockResponse = {
 };
 
 describe('citiesSlice', () => {
-  describe('setFilterReducer', () => {
-    test('should set filter', () => {
-      const initialState = { filter: '', filteredResults: {}, cities: {} };
-      const actionPayload = { type: 'setFilter', payload: 'Argentina' };
+  describe('reducers', () => {
+    describe('setFilterReducer', () => {
+      test('should set filter', () => {
+        const initialState = { filter: '', filteredResults: {}, cities: {} };
+        const actionPayload = { type: 'setFilter', payload: 'Argentina' };
 
-      const updatedState = setFilterReducer(initialState, actionPayload);
+        const updatedState = setFilterReducer(initialState, actionPayload);
 
-      expect(updatedState['filter']).toEqual('Argentina');
+        expect(updatedState['filter']).toEqual('Argentina');
+      });
     });
-  });
 
-  describe('filterSelector', () => {
-    test('should return filter value', () => {
-      const rootState = {
-        cities: { filter: 'Buenos Aires', filteredResults: {}, cities: {} },
+    describe('fetchCitiesFulfilledReducer', () => {
+      const initialState = {
+        filter: 'Argentina',
+        filteredResults: {},
+        cities: {},
+      };
+      const offset = 30;
+      const actionPayload = {
+        type: 'fetchCitiesFulfilled',
+        payload: {
+          offset,
+          filter: 'Argentina',
+          response: fetchCitiesMockResponse,
+        },
       };
 
-      expect(filterSelector(rootState)).toBe('Buenos Aires');
+      const updatedState = fetchCitiesFulfilledReducer(
+        initialState,
+        actionPayload
+      );
+
+      test('should init filter results', () => {
+        expect(
+          Array.isArray(updatedState.filteredResults['argentina'].geoNameIds)
+        ).toBe(true);
+      });
+
+      test('should store geoname ids in the right indices', () => {
+        fetchCitiesMockResponse.data
+          .map((c) => c.geonameid)
+          .forEach((id, index) => {
+            expect(
+              updatedState.filteredResults['argentina'].geoNameIds[
+                index + offset
+              ]
+            ).toBe(id);
+          });
+      });
+
+      test('should store total', () => {
+        expect(updatedState.filteredResults['argentina'].total).toBe(
+          fetchCitiesMockResponse.total
+        );
+      });
+
+      test('should store cities in a normalized way', () => {
+        fetchCitiesMockResponse.data.forEach((city) => {
+          expect(updatedState.cities[city.geonameid]).toEqual(city);
+        });
+      });
     });
   });
 
-  describe('fetchCitiesFulfilledReducer', () => {
-    const initialState = {
-      filter: 'Argentina',
-      filteredResults: {},
-      cities: {},
-    };
-    const offset = 30;
-    const actionPayload = {
-      type: 'fetchCitiesFulfilled',
-      payload: {
-        offset,
-        filter: 'Argentina',
-        response: fetchCitiesMockResponse,
-      },
-    };
+  describe('selectors', () => {
+    describe('filterSelector', () => {
+      test('should return filter value', () => {
+        const rootState = {
+          cities: { filter: 'Buenos Aires', filteredResults: {}, cities: {} },
+        };
 
-    const updatedState = fetchCitiesFulfilledReducer(
-      initialState,
-      actionPayload
-    );
-
-    test('should init filter results', () => {
-      expect(
-        Array.isArray(updatedState.filteredResults['argentina'].geoNameIds)
-      ).toBe(true);
-    });
-
-    test('should store geoname ids in the right indices', () => {
-      fetchCitiesMockResponse.data
-        .map((c) => c.geonameid)
-        .forEach((id, index) => {
-          expect(
-            updatedState.filteredResults['argentina'].geoNameIds[index + offset]
-          ).toBe(id);
-        });
-    });
-
-    test('should store total', () => {
-      expect(updatedState.filteredResults['argentina'].total).toBe(
-        fetchCitiesMockResponse.total
-      );
-    });
-
-    test('should store cities in a normalized way', () => {
-      fetchCitiesMockResponse.data.forEach((city) => {
-        expect(updatedState.cities[city.geonameid]).toEqual(city);
+        expect(filterSelector(rootState)).toBe('Buenos Aires');
       });
+    });
+
+    test('should return the total count for curren filter', () => {
+      const rootState = {
+        cities: {
+          filter: 'bue',
+          filteredResults: {
+            arg: { geoNameIds: [], total: 1000 },
+            bue: { geoNameIds: [], total: 100 },
+          },
+          cities: {},
+        },
+      };
+
+      expect(totalSelector(rootState)).toBe(100);
     });
   });
 });

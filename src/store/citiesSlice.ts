@@ -108,4 +108,9 @@ export const { setFilter } = citiesSlice.actions;
 export const filterSelector = (rootState: RootState) =>
   rootState[sliceName].filter;
 
+export const totalSelector = (rootState: RootState) => {
+  const currentFilter = rootState[sliceName].filter;
+  return rootState.cities.filteredResults[currentFilter].total;
+};
+
 // #endregion Selectors
