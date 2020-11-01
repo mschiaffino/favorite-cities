@@ -1,16 +1,48 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-
 import { RootState } from '.';
+import { citiesApi } from '../api/citiesApi';
+import { ApiResponse, CityInfo } from '../types';
 
 const sliceName = 'cities';
 
 type citiesSliceState = {
   filter: string;
+  filteredResults: {
+    [filter: string]: {
+      geoNameIds: number[];
+      total: number;
+    };
+  };
+  cities: { [geoNameId: number]: CityInfo };
 };
 
 const initialState: citiesSliceState = {
   filter: '',
+  filteredResults: {},
+  cities: {},
 };
+
+// #region Async thunks
+
+export const fetchCities = createAsyncThunk(
+  `${sliceName}/fetchCities`,
+  async ({
+    offset,
+    limit,
+    filter,
+  }: {
+    offset: number;
+    limit: number;
+    filter?: string;
+  }) => {
+    const response = await citiesApi.fetchCities(offset, limit, filter);
+    return Promise.resolve({ offset, filter: filter || '', response });
+  }
+);
+
+// #endregion Async thunks
+
+// #region Reducers
 
 // Redux toolkit uses Immer library internally, which lets us write code that
 // "mutates" some data, but actually applies the updates immutably. We do not
@@ -25,15 +57,55 @@ export const setFilterReducer = (
   return state;
 };
 
+export const fetchCitiesFulfilledReducer = (
+  state: citiesSliceState,
+  action: PayloadAction<{
+    offset: number;
+    filter: string;
+    response: ApiResponse;
+  }>
+): citiesSliceState => {
+  const { offset, filter } = action.payload;
+  const { data, total } = action.payload.response;
+  const lowerCaseFilter = filter.toLowerCase();
+
+  if (!state.filteredResults[lowerCaseFilter]) {
+    state.filteredResults[lowerCaseFilter] = {
+      geoNameIds: [],
+      total,
+    };
+  }
+  data.forEach((city: CityInfo, index: number) => {
+    state.cities[city.geonameid] = city;
+    state.filteredResults[lowerCaseFilter].geoNameIds[index + offset] =
+      city.geonameid;
+  });
+
+  return state;
+};
+
+// #endregion Reducers
+
 export const citiesSlice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
     setFilter: setFilterReducer,
   },
+  extraReducers: {
+    [fetchCities.fulfilled.toString()]: fetchCitiesFulfilledReducer,
+  },
 });
+
+// #region Action creators
 
 export const { setFilter } = citiesSlice.actions;
 
+// #endregion Action creators
+
+// #region Selectors
+
 export const filterSelector = (rootState: RootState) =>
   rootState[sliceName].filter;
+
+// #endregion Selectors

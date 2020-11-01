@@ -1,22 +1,152 @@
-import { filterSelector, setFilterReducer } from './citiesSlice';
+import {
+  fetchCitiesFulfilledReducer,
+  filterSelector,
+  setFilterReducer,
+} from './citiesSlice';
+
+const fetchCitiesMockResponse = {
+  // citiesApi.fetchCities(30, 10, 'Argentina');
+  data: [
+    {
+      country: 'Argentina',
+      geonameid: 3861445,
+      name: 'Chilecito',
+      subcountry: 'La Rioja',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3861416,
+      name: 'Chimbas',
+      subcountry: 'San Juan',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3861344,
+      name: 'Chivilcoy',
+      subcountry: 'Buenos Aires',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3861061,
+      name: 'Cinco Saltos',
+      subcountry: 'Rio Negro',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3861056,
+      name: 'Cipolletti',
+      subcountry: 'Rio Negro',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3435356,
+      name: 'Colegiales',
+      subcountry: 'Buenos Aires F.D.',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3860443,
+      name: 'Comodoro Rivadavia',
+      subcountry: 'Chubut',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3435264,
+      name: 'Concepción del Uruguay',
+      subcountry: 'Entre Rios',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3435261,
+      name: 'Concordia',
+      subcountry: 'Entre Rios',
+    },
+    {
+      country: 'Argentina',
+      geonameid: 3860259,
+      name: 'Córdoba',
+      subcountry: 'Cordoba',
+    },
+  ],
+  total: 203,
+  filter: 'argentina',
+  links: {
+    first: 'http://localhost:3030/cities?filter=argentina&limit=10',
+    prev: 'http://localhost:3030/cities?filter=argentina&limit=10&offset=20',
+    next: 'http://localhost:3030/cities?filter=argentina&limit=10&offset=40',
+    last: 'http://localhost:3030/cities?filter=argentina&limit=10&offset=200',
+  },
+};
 
 describe('citiesSlice', () => {
   describe('setFilterReducer', () => {
     test('should set filter', () => {
-      const initialState = { filter: '' };
+      const initialState = { filter: '', filteredResults: {}, cities: {} };
       const actionPayload = { type: 'setFilter', payload: 'Argentina' };
 
       const updatedState = setFilterReducer(initialState, actionPayload);
 
-      expect(updatedState).toEqual({ filter: 'Argentina' });
+      expect(updatedState['filter']).toEqual('Argentina');
     });
   });
 
   describe('filterSelector', () => {
     test('should return filter value', () => {
-      const rootState = { cities: { filter: 'Buenos Aires' } };
+      const rootState = {
+        cities: { filter: 'Buenos Aires', filteredResults: {}, cities: {} },
+      };
 
       expect(filterSelector(rootState)).toBe('Buenos Aires');
+    });
+  });
+
+  describe('fetchCitiesFulfilledReducer', () => {
+    const initialState = {
+      filter: 'Argentina',
+      filteredResults: {},
+      cities: {},
+    };
+    const offset = 30;
+    const actionPayload = {
+      type: 'fetchCitiesFulfilled',
+      payload: {
+        offset,
+        filter: 'Argentina',
+        response: fetchCitiesMockResponse,
+      },
+    };
+
+    const updatedState = fetchCitiesFulfilledReducer(
+      initialState,
+      actionPayload
+    );
+
+    test('should init filter results', () => {
+      expect(
+        Array.isArray(updatedState.filteredResults['argentina'].geoNameIds)
+      ).toBe(true);
+    });
+
+    test('should store geoname ids in the right indices', () => {
+      fetchCitiesMockResponse.data
+        .map((c) => c.geonameid)
+        .forEach((id, index) => {
+          expect(
+            updatedState.filteredResults['argentina'].geoNameIds[index + offset]
+          ).toBe(id);
+        });
+    });
+
+    test('should store total', () => {
+      expect(updatedState.filteredResults['argentina'].total).toBe(
+        fetchCitiesMockResponse.total
+      );
+    });
+
+    test('should store cities in a normalized way', () => {
+      fetchCitiesMockResponse.data.forEach((city) => {
+        expect(updatedState.cities[city.geonameid]).toEqual(city);
+      });
     });
   });
 });

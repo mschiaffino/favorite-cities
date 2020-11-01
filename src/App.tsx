@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './App.css';
-import { citiesApi } from './api/citiesApi';
-import { setFilter, filterSelector } from './store/citiesSlice';
+import { setFilter, filterSelector, fetchCities } from './store/citiesSlice';
 import FilterInput from './components/FilterInput';
 
 function App() {
@@ -11,7 +10,7 @@ function App() {
   const filter = useSelector(filterSelector);
 
   useEffect(() => {
-    citiesApi.fetchCities(0, 10, filter);
+    dispatch(fetchCities({ offset: 0, limit: 10, filter }));
   }, [filter]);
 
   const onFilterChanged = (filter: string) => {
