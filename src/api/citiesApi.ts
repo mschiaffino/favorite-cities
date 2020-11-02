@@ -1,4 +1,4 @@
-import { ApiResponse } from '../types';
+import { ApiResponse, PreferredCitiesResponse } from '../types';
 
 function fetchCities(
   offset = 0,
@@ -26,6 +26,13 @@ function patchPreferred(
   return makeRequest(path, 'PATCH', payload).catch(() => {
     // Retry
     return patchPreferred(geoNameId, value);
+  });
+}
+
+function fetchPreferred(): Promise<PreferredCitiesResponse> {
+  return makeRequest('/preferences/cities').catch(() => {
+    // Retry
+    return fetchPreferred();
   });
 }
 
@@ -63,5 +70,6 @@ function getUrl(path: string): string {
 
 export const citiesApi = {
   fetchCities,
+  fetchPreferred,
   patchPreferred,
 };
