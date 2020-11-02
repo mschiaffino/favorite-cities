@@ -11,6 +11,7 @@ import {
   setFilterReducer,
   totalSelector,
   isPreferredSelector,
+  preferredCitiesIdsSelector,
 } from './citiesSlice';
 
 const fetchCitiesMockResponse = {
@@ -293,6 +294,34 @@ describe('citiesSlice', () => {
         expect(isPreferredSelector(1234567)(rootState)).toBe(false);
         expect(isPreferredSelector(4568421)(rootState)).toBe(false);
         expect(isPreferredSelector(3865086)(rootState)).toBe(true);
+      });
+    });
+
+    describe('preferredCitiesIdsSelector', () => {
+      test('should return only the ids of the preferred cities', () => {
+        const rootState: RootState = {
+          cities: {
+            ...initialStateFromSlice,
+            preferred: {
+              4568421: false,
+              41234: false,
+              2345145: false,
+              3865086: true,
+              6456424: false,
+              756742: true,
+              876856: true,
+              5673567: false,
+              4567456: true,
+            },
+          },
+        };
+        const expectedIds = [3865086, 756742, 876856, 4567456];
+        const result = preferredCitiesIdsSelector(rootState);
+
+        expect(result.length).toBe(expectedIds.length);
+        for (const id of expectedIds) {
+          expect(result.includes(id)).toBe(true);
+        }
       });
     });
   });

@@ -181,6 +181,13 @@ export const isPreferredSelector = (geoNameId: number) => (
   rootState: RootState
 ) => (geoNameId && rootState[sliceName].preferred[geoNameId]) || false;
 
+export const preferredCitiesIdsSelector = (rootState: RootState) => {
+  const { preferred } = rootState[sliceName];
+  return Object.keys(preferred)
+    .map((k) => parseInt(k, 10))
+    .filter((k) => preferred[k]);
+};
+
 export const loadingPreferredSelector = (rootState: RootState) =>
   rootState[sliceName].loadingPreferred;
 
