@@ -17,6 +17,13 @@ function fetchCities(
   });
 }
 
+function fetchCityById(id: number): Promise<ApiResponse> {
+  return makeRequest(`/cities/${id}`).catch(() => {
+    //Retry
+    return fetchCityById(id);
+  });
+}
+
 function patchPreferred(
   geoNameId: number,
   value: boolean
@@ -70,6 +77,7 @@ function getUrl(path: string): string {
 
 export const citiesApi = {
   fetchCities,
+  fetchCityById,
   fetchPreferred,
   patchPreferred,
 };
