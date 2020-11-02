@@ -5,7 +5,7 @@ import { ApiResponse, CityInfo } from '../types';
 
 const sliceName = 'cities';
 
-export type citiesSliceState = {
+export type CitiesSliceState = {
   filter: string;
   filteredResults: {
     [filter: string]: {
@@ -17,7 +17,7 @@ export type citiesSliceState = {
   preferred: { [geoNameId: number]: boolean };
 };
 
-export const initialState: citiesSliceState = {
+export const initialState: CitiesSliceState = {
   filter: '',
   filteredResults: {},
   cities: {},
@@ -63,21 +63,21 @@ export const patchPreferred = createAsyncThunk(
 // to simplify unit testing
 
 export const setFilterReducer = (
-  state: citiesSliceState,
+  state: CitiesSliceState,
   action: PayloadAction<string>
-): citiesSliceState => {
+): CitiesSliceState => {
   state.filter = action.payload;
   return state;
 };
 
 export const fetchCitiesFulfilledReducer = (
-  state: citiesSliceState,
+  state: CitiesSliceState,
   action: PayloadAction<{
     offset: number;
     filter: string;
     response: ApiResponse;
   }>
-): citiesSliceState => {
+): CitiesSliceState => {
   const { offset, filter } = action.payload;
   const { data, total } = action.payload.response;
   const lowerCaseFilter = filter.toLowerCase();

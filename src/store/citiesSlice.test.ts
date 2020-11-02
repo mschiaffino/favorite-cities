@@ -1,7 +1,7 @@
 import { RootState } from '.';
 import {
   initialState as initialStateFromSlice,
-  citiesSliceState,
+  CitiesSliceState,
   cityByIndexSelector,
   fetchCitiesFulfilledReducer,
   patchPreferredFulfilledReducer,
@@ -90,11 +90,11 @@ describe('citiesSlice', () => {
   describe('reducers', () => {
     describe('setFilterReducer', () => {
       test('should set filter', () => {
-        const actionPayload = { type: 'setFilter', payload: 'Argentina' };
+        const payloadAction = { type: 'setFilter', payload: 'Argentina' };
 
         const updatedState = setFilterReducer(
           initialStateFromSlice,
-          actionPayload
+          payloadAction
         );
 
         expect(updatedState['filter']).toEqual('Argentina');
@@ -107,7 +107,7 @@ describe('citiesSlice', () => {
         filter: 'Argentina',
       };
       const offset = 30;
-      const actionPayload = {
+      const payloadAction = {
         type: 'fetchCitiesFulfilled',
         payload: {
           offset,
@@ -118,7 +118,7 @@ describe('citiesSlice', () => {
 
       const updatedState = fetchCitiesFulfilledReducer(
         initialState,
-        actionPayload
+        payloadAction
       );
 
       test('should init filter results', () => {
@@ -155,14 +155,14 @@ describe('citiesSlice', () => {
     describe('patchPreferredFulfilledReducer', () => {
       test('should set the value to true', () => {
         const geoNameId = 745732;
-        const actionPayload = {
+        const payloadAction = {
           type: 'patchPreferred',
           payload: { geoNameId, value: true },
         };
 
-        const updatedState: citiesSliceState = patchPreferredFulfilledReducer(
+        const updatedState: CitiesSliceState = patchPreferredFulfilledReducer(
           initialStateFromSlice,
-          actionPayload
+          payloadAction
         );
 
         expect(updatedState.preferred[geoNameId]).toBe(true);
@@ -170,14 +170,14 @@ describe('citiesSlice', () => {
 
       test('should set the value to false', () => {
         const geoNameId = 745732;
-        const actionPayload = {
+        const payloadAction = {
           type: 'patchPreferred',
           payload: { geoNameId, value: false },
         };
 
-        const updatedState: citiesSliceState = patchPreferredFulfilledReducer(
+        const updatedState: CitiesSliceState = patchPreferredFulfilledReducer(
           initialStateFromSlice,
-          actionPayload
+          payloadAction
         );
 
         expect(updatedState.preferred[geoNameId]).toBe(false);
