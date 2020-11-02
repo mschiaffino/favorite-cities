@@ -17,6 +17,18 @@ function fetchCities(
   });
 }
 
+function patchPreferred(
+  geoNameId: number,
+  value: boolean
+): Promise<ApiResponse> {
+  const payload = { [geoNameId.toString()]: value };
+  const path = '/preferences/cities';
+  return makeRequest(path, 'PATCH', payload).catch(() => {
+    // Retry
+    return patchPreferred(geoNameId, value);
+  });
+}
+
 function makeRequest(path: string, method: string = 'GET', data: any = null) {
   const requestParams: RequestInit = {
     method,
@@ -47,4 +59,5 @@ function getUrl(path: string): string {
 
 export const citiesApi = {
   fetchCities,
+  patchPreferred,
 };
