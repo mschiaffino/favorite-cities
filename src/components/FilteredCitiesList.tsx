@@ -66,7 +66,7 @@ export default function FilteredCitiesList() {
           )}
         </InfiniteLoader>
       ) : (
-        <Box padding={1}>
+        <Box padding={1} height={300}>
           {count === undefined && <Skeleton variant="rect" height={300} />}
           {count === 0 && 'No matching results'}
         </Box>
