@@ -5,7 +5,7 @@ import { ApiResponse, CityInfo } from '../types';
 
 const sliceName = 'cities';
 
-type citiesSliceState = {
+export type citiesSliceState = {
   filter: string;
   filteredResults: {
     [filter: string]: {
@@ -39,6 +39,17 @@ export const fetchCities = createAsyncThunk(
   }) => {
     const response = await citiesApi.fetchCities(offset, limit, filter);
     return Promise.resolve({ offset, filter: filter || '', response });
+  }
+);
+
+export const patchPreferred = createAsyncThunk(
+  `${sliceName}/patchPreferred`,
+  async ({ geoNameId, value }: { geoNameId: number; value: boolean }) => {
+    await citiesApi.patchPreferred(geoNameId, value);
+    return Promise.resolve({
+      geoNameId,
+      value,
+    });
   }
 );
 
@@ -86,6 +97,12 @@ export const fetchCitiesFulfilledReducer = (
   return state;
 };
 
+export const patchPreferredFulfilledReducer = (state: any, action: any) => {
+  const { geoNameId, value } = action.payload;
+  state.preferred[geoNameId] = value;
+  return state;
+};
+
 // #endregion Reducers
 
 export const citiesSlice = createSlice({
@@ -96,6 +113,7 @@ export const citiesSlice = createSlice({
   },
   extraReducers: {
     [fetchCities.fulfilled.toString()]: fetchCitiesFulfilledReducer,
+    [patchPreferred.fulfilled.toString()]: patchPreferredFulfilledReducer,
   },
 });
 

@@ -1,8 +1,10 @@
 import { RootState } from '.';
 import {
   initialState as initialStateFromSlice,
+  citiesSliceState,
   cityByIndexSelector,
   fetchCitiesFulfilledReducer,
+  patchPreferredFulfilledReducer,
   filteredResultsSelector,
   filterSelector,
   setFilterReducer,
@@ -147,6 +149,38 @@ describe('citiesSlice', () => {
         fetchCitiesMockResponse.data.forEach((city) => {
           expect(updatedState.cities[city.geonameid]).toEqual(city);
         });
+      });
+    });
+
+    describe('patchPreferredFulfilledReducer', () => {
+      test('should set the value to true', () => {
+        const geoNameId = 745732;
+        const actionPayload = {
+          type: 'patchPreferred',
+          payload: { geoNameId, value: true },
+        };
+
+        const updatedState: citiesSliceState = patchPreferredFulfilledReducer(
+          initialStateFromSlice,
+          actionPayload
+        );
+
+        expect(updatedState.preferred[geoNameId]).toBe(true);
+      });
+
+      test('should set the value to false', () => {
+        const geoNameId = 745732;
+        const actionPayload = {
+          type: 'patchPreferred',
+          payload: { geoNameId, value: false },
+        };
+
+        const updatedState: citiesSliceState = patchPreferredFulfilledReducer(
+          initialStateFromSlice,
+          actionPayload
+        );
+
+        expect(updatedState.preferred[geoNameId]).toBe(false);
       });
     });
   });
