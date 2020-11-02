@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ListChildComponentProps } from 'react-window';
@@ -32,6 +32,12 @@ export default function CityListItem({
   const isPreferreed = useSelector(isPreferredSelector(city?.geonameid));
   const loadingPreferred = useSelector(loadingPreferredSelector);
   const [savingChange, setSavingChange] = useState(false);
+
+  useEffect(() => {
+    // To avoid keeping the spinner in case that the component was reused with
+    // another city because of a filter change
+    setSavingChange(false);
+  }, [city]);
 
   const onClick = async () => {
     if (savingChange) {
