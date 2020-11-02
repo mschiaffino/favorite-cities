@@ -41,7 +41,7 @@ export default function CityListItem({
   }, [index]);
 
   const onClick = async () => {
-    if (savingChange) {
+    if (savingChange || !city) {
       return;
     }
     setSavingChange(true);
