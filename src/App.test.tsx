@@ -5,12 +5,12 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 import { store } from './store';
 
-test('renders title header', () => {
+test('renders app outer box', () => {
   render(
     <Provider store={store}>
       <App />
     </Provider>
   );
-  const h1 = screen.getByText(/Favorite Cities App/i);
-  expect(h1).toBeInTheDocument();
+  const appOuterBox = screen.getByTestId('app-outer-box');
+  expect(appOuterBox).toBeInTheDocument();
 });

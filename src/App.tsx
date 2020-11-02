@@ -2,7 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import throttle from 'lodash.throttle';
-import { Box } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 import './App.css';
 import {
@@ -13,6 +14,7 @@ import {
 } from './store/citiesSlice';
 import FilterInput from './components/FilterInput';
 import FilteredCitiesList from './components/FilteredCitiesList';
+import PreferedCitiesList from './components/PreferedCitiesList';
 
 function App() {
   const dispatch = useDispatch();
@@ -33,12 +35,21 @@ function App() {
   );
 
   return (
-    <Box margin={3} width={500}>
-      <h1>Favorite Cities App</h1>
-      <Box marginBottom={1}>
-        <FilterInput onFilterChanged={onFilterChanged} />
+    <Box display="flex" marginY={3} flexWrap="wrap" data-testid="app-outer-box">
+      <Box margin={3} width={500}>
+        <Box marginBottom={1}>
+          <FilterInput onFilterChanged={onFilterChanged} />
+        </Box>
+        <FilteredCitiesList />
       </Box>
-      <FilteredCitiesList />
+      <Box margin={3}>
+        <Box marginBottom={1}>
+          <Typography variant="h3">Your favorite cities</Typography>
+        </Box>
+        <Box maxHeight={300} overflow="auto">
+          <PreferedCitiesList />
+        </Box>
+      </Box>
     </Box>
   );
 }
