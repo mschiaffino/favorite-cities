@@ -5,6 +5,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Box from '@material-ui/core/Box/Box';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import {
   loadingPreferredSelector,
@@ -28,14 +29,23 @@ export default function PreferredCitiesList() {
 
   return (
     <List component="nav" className={classes.root} aria-label="contacts">
-      {!loadingPreferred && !preferredCitiesIds.length && (
-        <Box paddingLeft={1}>
-          <Typography>No cities selected yet</Typography>
-        </Box>
-      )}
       {preferredCitiesIds.map((id) => (
         <PreferredCitiesListItem geoNameId={id} />
       ))}
+
+      {loadingPreferred && !preferredCitiesIds.length && (
+        <Box paddingLeft={2}>
+          <Box height={48}>
+            <Skeleton width={324} />
+          </Box>
+          <Box height={48}>
+            <Skeleton width={324} />
+          </Box>
+          <Box height={48}>
+            <Skeleton width={324} />
+          </Box>
+        </Box>
+      )}
     </List>
   );
 }

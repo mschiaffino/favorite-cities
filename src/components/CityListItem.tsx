@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import {
   cityByIndexSelector,
@@ -59,17 +60,20 @@ export default function CityListItem({
       onClick={onClick}
     >
       <Box width={42}>
-        {loadingPreferred || savingChange ? (
-          <CircularProgress size={20} />
-        ) : (
+        {loadingPreferred && <Skeleton variant="rect" width={20} height={20} />}
+        {savingChange && <CircularProgress size={20} />}
+        {!loadingPreferred && !savingChange && (
           <Checkbox checked={isPreferreed} edge="start" />
         )}
       </Box>
-
-      <ListItemText
-        primary={city?.name || 'Loading...'}
-        secondary={city ? `${city.subcountry} - ${city.country} ` : undefined}
-      />
+      {city ? (
+        <ListItemText
+          primary={city?.name}
+          secondary={city && `${city.subcountry} - ${city.country} `}
+        />
+      ) : (
+        <Skeleton width={300} />
+      )}
     </ListItem>
   );
 }

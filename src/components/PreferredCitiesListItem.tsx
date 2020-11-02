@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import StarIcon from '@material-ui/icons/Star';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import { cityByGeoNameIdSelector, fetchCityById } from '../store/citiesSlice';
 
@@ -27,9 +28,11 @@ export default function PreferredCitiesListItem({ geoNameId }: Props) {
       <ListItemIcon>
         <StarIcon />
       </ListItemIcon>
-      <ListItemText
-        primary={city ? `${city?.name} (${city?.subcountry})` : 'Loading...'}
-      />
+      {city ? (
+        <ListItemText primary={city && `${city?.name} (${city?.subcountry})`} />
+      ) : (
+        <Skeleton width={300} />
+      )}
     </ListItem>
   );
 }

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import Box from '@material-ui/core/Box';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import {
   filterSelector,
@@ -42,34 +43,34 @@ export default function FilteredCitiesList() {
 
   return (
     <Box border={1} borderRadius={4} borderColor="#ddd">
-      {!count && (
+      {count ? (
+        <InfiniteLoader
+          isItemLoaded={isCityLoaded}
+          itemCount={count}
+          loadMoreItems={loadMoreItems}
+          minimumBatchSize={50}
+          threshold={30}
+        >
+          {({ onItemsRendered, ref }: any) => (
+            <List
+              className="List"
+              height={300}
+              itemCount={count}
+              itemSize={50}
+              onItemsRendered={onItemsRendered}
+              ref={ref}
+              width="100%"
+            >
+              {CityListItem}
+            </List>
+          )}
+        </InfiniteLoader>
+      ) : (
         <Box padding={1}>
-          {count === undefined && 'Loading...'}
+          {count === undefined && <Skeleton variant="rect" height={300} />}
           {count === 0 && 'No matching results'}
         </Box>
       )}
-
-      <InfiniteLoader
-        isItemLoaded={isCityLoaded}
-        itemCount={count}
-        loadMoreItems={loadMoreItems}
-        minimumBatchSize={50}
-        threshold={30}
-      >
-        {({ onItemsRendered, ref }: any) => (
-          <List
-            className="List"
-            height={300}
-            itemCount={count}
-            itemSize={50}
-            onItemsRendered={onItemsRendered}
-            ref={ref}
-            width="100%"
-          >
-            {CityListItem}
-          </List>
-        )}
-      </InfiniteLoader>
     </Box>
   );
 }
