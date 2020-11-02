@@ -20,7 +20,7 @@ export default function PreferedCitiesListItem({ geoNameId }: Props) {
     if (geoNameId && !city) {
       dispatch(fetchCityById({ id: geoNameId }));
     }
-  }, [city, geoNameId]);
+  }, [dispatch, city, geoNameId]);
 
   return (
     <ListItem>
