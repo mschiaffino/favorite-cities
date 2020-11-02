@@ -5,7 +5,12 @@ import throttle from 'lodash.throttle';
 import { Box } from '@material-ui/core';
 
 import './App.css';
-import { setFilter, filterSelector, fetchCities } from './store/citiesSlice';
+import {
+  setFilter,
+  filterSelector,
+  fetchCities,
+  fetchPreferred,
+} from './store/citiesSlice';
 import FilterInput from './components/FilterInput';
 import FilteredCitiesList from './components/FilteredCitiesList';
 
@@ -16,6 +21,10 @@ function App() {
   useEffect(() => {
     dispatch(fetchCities({ offset: 0, limit: 50, filter }));
   }, [filter, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchPreferred());
+  }, [dispatch]);
 
   // eslint-disable-next-line
   const onFilterChanged = useCallback(
