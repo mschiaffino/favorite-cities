@@ -80,7 +80,7 @@ export const setFilterReducer = (
   state: CitiesSliceState,
   action: PayloadAction<string>
 ): CitiesSliceState => {
-  state.filter = action.payload;
+  state.filter = action.payload.toLowerCase();
   return state;
 };
 

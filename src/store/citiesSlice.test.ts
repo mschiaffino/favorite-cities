@@ -91,7 +91,7 @@ const fetchCitiesMockResponse = {
 describe('citiesSlice', () => {
   describe('reducers', () => {
     describe('setFilterReducer', () => {
-      test('should set filter', () => {
+      test('should set filter lowercased', () => {
         const payloadAction = { type: 'setFilter', payload: 'Argentina' };
 
         const updatedState: CitiesSliceState = setFilterReducer(
@@ -99,7 +99,7 @@ describe('citiesSlice', () => {
           payloadAction
         );
 
-        expect(updatedState['filter']).toEqual('Argentina');
+        expect(updatedState['filter']).toEqual('argentina');
       });
     });
 
