@@ -170,11 +170,17 @@ export const filteredResultsSelector = (rootState: RootState) => {
   return rootState[sliceName].filteredResults[currentFilter]?.geoNameIds;
 };
 
+export const cityByGeoNameIdSelector = (geoNameId: number) => (
+  rootState: RootState
+) => {
+  return rootState[sliceName].cities[geoNameId];
+};
+
 export const cityByIndexSelector = (index: number) => (
   rootState: RootState
 ) => {
   const geoNameId = filteredResultsSelector(rootState)[index];
-  return rootState[sliceName].cities[geoNameId];
+  return cityByGeoNameIdSelector(geoNameId)(rootState);
 };
 
 export const isPreferredSelector = (geoNameId: number) => (
