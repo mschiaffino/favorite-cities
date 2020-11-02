@@ -11,6 +11,7 @@ import {
   preferredCitiesIdsSelector,
 } from '../store/citiesSlice';
 import PreferredCitiesListItem from './PreferredCitiesListItem';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +32,12 @@ export default function PreferredCitiesList() {
       {preferredCitiesIds.map((id) => (
         <PreferredCitiesListItem geoNameId={id} />
       ))}
+
+      {!loadingPreferred && !preferredCitiesIds.length && (
+        <Box paddingLeft={1}>
+          <Typography>No cities selected yet</Typography>
+        </Box>
+      )}
 
       {loadingPreferred && !preferredCitiesIds.length && (
         <Box paddingLeft={2}>
