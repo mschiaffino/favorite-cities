@@ -14,12 +14,14 @@ type citiesSliceState = {
     };
   };
   cities: { [geoNameId: number]: CityInfo };
+  preferred: { [geoNameId: number]: boolean };
 };
 
 export const initialState: citiesSliceState = {
   filter: '',
   filteredResults: {},
   cities: {},
+  preferred: {},
 };
 
 // #region Async thunks
@@ -124,5 +126,8 @@ export const cityByIndexSelector = (index: number) => (
   const geoNameId = filteredResultsSelector(rootState)[index];
   return rootState[sliceName].cities[geoNameId];
 };
+
+export const isPreferredSelector = (geoNameId: number) => (rootState: any) =>
+  (geoNameId && rootState[sliceName].preferred[geoNameId]) || false;
 
 // #endregion Selectors

@@ -1,11 +1,13 @@
+import { RootState } from '.';
 import {
+  initialState as initialStateFromSlice,
   cityByIndexSelector,
   fetchCitiesFulfilledReducer,
   filteredResultsSelector,
   filterSelector,
   setFilterReducer,
   totalSelector,
-  initialState as initialStateFromSlice,
+  isPreferredSelector,
 } from './citiesSlice';
 
 const fetchCitiesMockResponse = {
@@ -152,7 +154,7 @@ describe('citiesSlice', () => {
   describe('selectors', () => {
     describe('filterSelector', () => {
       test('should return filter value', () => {
-        const rootState = {
+        const rootState: RootState = {
           cities: { ...initialStateFromSlice, filter: 'Buenos Aires' },
         };
 
@@ -162,7 +164,7 @@ describe('citiesSlice', () => {
 
     describe('totalSelector', () => {
       test('should return the total count for curren filter', () => {
-        const rootState = {
+        const rootState: RootState = {
           cities: {
             ...initialStateFromSlice,
             filter: 'bue',
@@ -179,7 +181,7 @@ describe('citiesSlice', () => {
 
     describe('filteredResultsSelector', () => {
       test('should return filtered results for current filter', () => {
-        const rootState = {
+        const rootState: RootState = {
           cities: {
             ...initialStateFromSlice,
             filter: 'arg',
@@ -203,7 +205,7 @@ describe('citiesSlice', () => {
           subcountry: 'Buenos Aires',
         };
 
-        const rootState = {
+        const rootState: RootState = {
           cities: {
             ...initialStateFromSlice,
             filter: 'arg',
@@ -220,6 +222,23 @@ describe('citiesSlice', () => {
         };
 
         expect(cityByIndexSelector(2)(rootState)).toEqual(bahiaCityInfo);
+      });
+    });
+
+    describe('isPreferredSelector', () => {
+      test('should return the right preferred value', () => {
+        const rootState: RootState = {
+          cities: {
+            ...initialStateFromSlice,
+            preferred: {
+              4568421: false,
+              3865086: true,
+            },
+          },
+        };
+        expect(isPreferredSelector(1234567)(rootState)).toBe(false);
+        expect(isPreferredSelector(4568421)(rootState)).toBe(false);
+        expect(isPreferredSelector(3865086)(rootState)).toBe(true);
       });
     });
   });
