@@ -42,7 +42,7 @@ function App() {
         </Box>
         <FilteredCitiesList />
       </Box>
-      <Box margin={3}>
+      <Box margin={3} flexGrow={1}>
         <Box marginBottom={1}>
           <Typography variant="h3">Your favorite cities</Typography>
         </Box>
