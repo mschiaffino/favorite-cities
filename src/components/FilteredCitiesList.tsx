@@ -53,8 +53,8 @@ export default function FilteredCitiesList() {
         isItemLoaded={isCityLoaded}
         itemCount={count}
         loadMoreItems={loadMoreItems}
-        minimumBatchSize={100}
-        threshold={50}
+        minimumBatchSize={50}
+        threshold={30}
       >
         {({ onItemsRendered, ref }: any) => (
           <List

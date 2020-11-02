@@ -14,7 +14,7 @@ function App() {
   const filter = useSelector(filterSelector);
 
   useEffect(() => {
-    dispatch(fetchCities({ offset: 0, limit: 10, filter }));
+    dispatch(fetchCities({ offset: 0, limit: 50, filter }));
   }, [filter, dispatch]);
 
   // eslint-disable-next-line
