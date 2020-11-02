@@ -42,6 +42,11 @@ export const fetchCities = createAsyncThunk(
   }
 );
 
+export const fetchPreferred = createAsyncThunk(
+  `${sliceName}/fetchPreferred`,
+  citiesApi.fetchPreferred
+);
+
 export const patchPreferred = createAsyncThunk(
   `${sliceName}/patchPreferred`,
   async ({ geoNameId, value }: { geoNameId: number; value: boolean }) => {
@@ -97,6 +102,14 @@ export const fetchCitiesFulfilledReducer = (
   return state;
 };
 
+export const fetchPreferredFulfilledReducer = (state: any, action: any) => {
+  const { data } = action.payload;
+  for (const geoNameId of data) {
+    state.preferred[geoNameId] = true;
+  }
+  return state;
+};
+
 export const patchPreferredFulfilledReducer = (state: any, action: any) => {
   const { geoNameId, value } = action.payload;
   state.preferred[geoNameId] = value;
@@ -113,6 +126,7 @@ export const citiesSlice = createSlice({
   },
   extraReducers: {
     [fetchCities.fulfilled.toString()]: fetchCitiesFulfilledReducer,
+    [fetchPreferred.fulfilled.toString()]: fetchPreferredFulfilledReducer,
     [patchPreferred.fulfilled.toString()]: patchPreferredFulfilledReducer,
   },
 });

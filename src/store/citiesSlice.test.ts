@@ -4,6 +4,7 @@ import {
   CitiesSliceState,
   cityByIndexSelector,
   fetchCitiesFulfilledReducer,
+  fetchPreferredFulfilledReducer,
   patchPreferredFulfilledReducer,
   filteredResultsSelector,
   filterSelector,
@@ -92,7 +93,7 @@ describe('citiesSlice', () => {
       test('should set filter', () => {
         const payloadAction = { type: 'setFilter', payload: 'Argentina' };
 
-        const updatedState = setFilterReducer(
+        const updatedState: CitiesSliceState = setFilterReducer(
           initialStateFromSlice,
           payloadAction
         );
@@ -116,7 +117,7 @@ describe('citiesSlice', () => {
         },
       };
 
-      const updatedState = fetchCitiesFulfilledReducer(
+      const updatedState: CitiesSliceState = fetchCitiesFulfilledReducer(
         initialState,
         payloadAction
       );
@@ -149,6 +150,25 @@ describe('citiesSlice', () => {
         fetchCitiesMockResponse.data.forEach((city) => {
           expect(updatedState.cities[city.geonameid]).toEqual(city);
         });
+      });
+    });
+
+    describe('fetchPreferredFulfilledReducer', () => {
+      test('should set the geoNameIds of the preferred cities', () => {
+        const geoNameIdsOfPreferredCities = [546735, 856782, 234784];
+        const payloadAction = {
+          type: 'fetchPreferred',
+          payload: { data: geoNameIdsOfPreferredCities },
+        };
+
+        const updatedState: CitiesSliceState = fetchPreferredFulfilledReducer(
+          initialStateFromSlice,
+          payloadAction
+        );
+
+        for (const geoNameId of geoNameIdsOfPreferredCities) {
+          expect(updatedState.preferred[geoNameId]).toBe(true);
+        }
       });
     });
 
