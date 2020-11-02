@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import throttle from 'lodash.throttle';
+import { Box } from '@material-ui/core';
 
 import './App.css';
 import { setFilter, filterSelector, fetchCities } from './store/citiesSlice';
@@ -23,11 +24,13 @@ function App() {
   );
 
   return (
-    <div>
+    <Box margin={3} width={500}>
       <h1>Favorite Cities App</h1>
-      <FilterInput onFilterChanged={onFilterChanged} />
+      <Box marginBottom={1}>
+        <FilterInput onFilterChanged={onFilterChanged} />
+      </Box>
       <FilteredCitiesList />
-    </div>
+    </Box>
   );
 }
 
