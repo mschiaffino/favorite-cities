@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
+import Box from '@material-ui/core/Box';
 
 import {
   filterSelector,
@@ -40,26 +41,35 @@ export default function FilteredCitiesList() {
   };
 
   return (
-    <InfiniteLoader
-      isItemLoaded={isCityLoaded}
-      itemCount={count}
-      loadMoreItems={loadMoreItems}
-      minimumBatchSize={100}
-      threshold={50}
-    >
-      {({ onItemsRendered, ref }: any) => (
-        <List
-          className="List"
-          height={300}
-          itemCount={count}
-          itemSize={50}
-          onItemsRendered={onItemsRendered}
-          ref={ref}
-          width="100%"
-        >
-          {CityListItem}
-        </List>
+    <Box border={1} borderRadius={4} borderColor="#ddd">
+      {!count && (
+        <Box padding={1}>
+          {count === undefined && 'Loading...'}
+          {count === 0 && 'No matching results'}
+        </Box>
       )}
-    </InfiniteLoader>
+
+      <InfiniteLoader
+        isItemLoaded={isCityLoaded}
+        itemCount={count}
+        loadMoreItems={loadMoreItems}
+        minimumBatchSize={100}
+        threshold={50}
+      >
+        {({ onItemsRendered, ref }: any) => (
+          <List
+            className="List"
+            height={300}
+            itemCount={count}
+            itemSize={50}
+            onItemsRendered={onItemsRendered}
+            ref={ref}
+            width="100%"
+          >
+            {CityListItem}
+          </List>
+        )}
+      </InfiniteLoader>
+    </Box>
   );
 }
