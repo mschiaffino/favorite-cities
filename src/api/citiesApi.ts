@@ -32,6 +32,7 @@ function patchPreferred(
 function makeRequest(path: string, method: string = 'GET', data: any = null) {
   const requestParams: RequestInit = {
     method,
+    headers: { 'Content-Type': 'application/json' },
   };
   if (data !== null) {
     requestParams.body = JSON.stringify(data);
@@ -40,8 +41,11 @@ function makeRequest(path: string, method: string = 'GET', data: any = null) {
 
   return fetch(url, requestParams)
     .then((resp) => {
+      const contentTypeHeader = resp.headers.get('content-type');
       if (resp.ok) {
-        return resp.json();
+        return contentTypeHeader?.includes('application/json')
+          ? resp.json()
+          : null;
       }
       return resp.text();
     })
