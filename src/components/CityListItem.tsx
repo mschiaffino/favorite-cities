@@ -37,7 +37,7 @@ export default function CityListItem({
     // To avoid keeping the spinner in case that the component was reused with
     // another city because of a filter change
     setSavingChange(false);
-  }, [city]);
+  }, [index]);
 
   const onClick = async () => {
     if (savingChange) {
