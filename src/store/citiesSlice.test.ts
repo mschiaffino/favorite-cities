@@ -5,6 +5,7 @@ import {
   filterSelector,
   setFilterReducer,
   totalSelector,
+  initialState as initialStateFromSlice,
 } from './citiesSlice';
 
 const fetchCitiesMockResponse = {
@@ -85,10 +86,12 @@ describe('citiesSlice', () => {
   describe('reducers', () => {
     describe('setFilterReducer', () => {
       test('should set filter', () => {
-        const initialState = { filter: '', filteredResults: {}, cities: {} };
         const actionPayload = { type: 'setFilter', payload: 'Argentina' };
 
-        const updatedState = setFilterReducer(initialState, actionPayload);
+        const updatedState = setFilterReducer(
+          initialStateFromSlice,
+          actionPayload
+        );
 
         expect(updatedState['filter']).toEqual('Argentina');
       });
@@ -96,9 +99,8 @@ describe('citiesSlice', () => {
 
     describe('fetchCitiesFulfilledReducer', () => {
       const initialState = {
+        ...initialStateFromSlice,
         filter: 'Argentina',
-        filteredResults: {},
-        cities: {},
       };
       const offset = 30;
       const actionPayload = {
@@ -151,7 +153,7 @@ describe('citiesSlice', () => {
     describe('filterSelector', () => {
       test('should return filter value', () => {
         const rootState = {
-          cities: { filter: 'Buenos Aires', filteredResults: {}, cities: {} },
+          cities: { ...initialStateFromSlice, filter: 'Buenos Aires' },
         };
 
         expect(filterSelector(rootState)).toBe('Buenos Aires');
@@ -162,12 +164,12 @@ describe('citiesSlice', () => {
       test('should return the total count for curren filter', () => {
         const rootState = {
           cities: {
+            ...initialStateFromSlice,
             filter: 'bue',
             filteredResults: {
               arg: { geoNameIds: [], total: 1000 },
               bue: { geoNameIds: [], total: 100 },
             },
-            cities: {},
           },
         };
 
@@ -179,12 +181,12 @@ describe('citiesSlice', () => {
       test('should return filtered results for current filter', () => {
         const rootState = {
           cities: {
+            ...initialStateFromSlice,
             filter: 'arg',
             filteredResults: {
               arg: { geoNameIds: [1, 2, 3, 4, 5], total: 1000 },
               bue: { geoNameIds: [8, 9, 10, 15, 30], total: 100 },
             },
-            cities: {},
           },
         };
 
@@ -203,6 +205,7 @@ describe('citiesSlice', () => {
 
         const rootState = {
           cities: {
+            ...initialStateFromSlice,
             filter: 'arg',
             filteredResults: {
               arg: {

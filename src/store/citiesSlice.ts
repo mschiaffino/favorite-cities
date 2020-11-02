@@ -16,7 +16,7 @@ type citiesSliceState = {
   cities: { [geoNameId: number]: CityInfo };
 };
 
-const initialState: citiesSliceState = {
+export const initialState: citiesSliceState = {
   filter: '',
   filteredResults: {},
   cities: {},
