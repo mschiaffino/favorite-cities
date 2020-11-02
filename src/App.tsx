@@ -16,7 +16,7 @@ import {
 } from './store/citiesSlice';
 import FilterInput from './components/FilterInput';
 import FilteredCitiesList from './components/FilteredCitiesList';
-import PreferedCitiesList from './components/PreferedCitiesList';
+import PreferredCitiesList from './components/PreferredCitiesList';
 
 function App() {
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ function App() {
           </Box>
         </Box>
         <Box maxHeight={300} overflow="auto">
-          <PreferedCitiesList />
+          <PreferredCitiesList />
         </Box>
       </Box>
     </Box>

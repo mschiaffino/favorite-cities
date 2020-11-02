@@ -10,7 +10,7 @@ import {
   loadingPreferredSelector,
   preferredCitiesIdsSelector,
 } from '../store/citiesSlice';
-import PreferedCitiesListItem from './PreferedCitiesListItem';
+import PreferredCitiesListItem from './PreferredCitiesListItem';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function PreferedCitiesList() {
+export default function PreferredCitiesList() {
   const classes = useStyles();
   const preferredCitiesIds = useSelector(preferredCitiesIdsSelector);
   const loadingPreferred = useSelector(loadingPreferredSelector);
@@ -34,7 +34,7 @@ export default function PreferedCitiesList() {
         </Box>
       )}
       {preferredCitiesIds.map((id) => (
-        <PreferedCitiesListItem geoNameId={id} />
+        <PreferredCitiesListItem geoNameId={id} />
       ))}
     </List>
   );

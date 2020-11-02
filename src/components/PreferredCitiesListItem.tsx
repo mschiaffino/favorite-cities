@@ -12,7 +12,7 @@ interface Props {
   geoNameId: number;
 }
 
-export default function PreferedCitiesListItem({ geoNameId }: Props) {
+export default function PreferredCitiesListItem({ geoNameId }: Props) {
   const dispatch = useDispatch();
   const city = useSelector(cityByGeoNameIdSelector(geoNameId));
 
