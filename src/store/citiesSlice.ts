@@ -15,6 +15,7 @@ export type CitiesSliceState = {
   };
   cities: { [geoNameId: number]: CityInfo };
   preferred: { [geoNameId: number]: boolean };
+  loadingPreferred: boolean;
 };
 
 export const initialState: CitiesSliceState = {
@@ -22,6 +23,7 @@ export const initialState: CitiesSliceState = {
   filteredResults: {},
   cities: {},
   preferred: {},
+  loadingPreferred: false,
 };
 
 // #region Async thunks
@@ -102,15 +104,30 @@ export const fetchCitiesFulfilledReducer = (
   return state;
 };
 
-export const fetchPreferredFulfilledReducer = (state: any, action: any) => {
+export const fetchPreferredPendingReducer = (
+  state: CitiesSliceState,
+  action: any
+) => {
+  state.loadingPreferred = true;
+  return state;
+};
+
+export const fetchPreferredFulfilledReducer = (
+  state: CitiesSliceState,
+  action: any
+) => {
   const { data } = action.payload;
   for (const geoNameId of data) {
     state.preferred[geoNameId] = true;
   }
+  state.loadingPreferred = false;
   return state;
 };
 
-export const patchPreferredFulfilledReducer = (state: any, action: any) => {
+export const patchPreferredFulfilledReducer = (
+  state: CitiesSliceState,
+  action: any
+) => {
   const { geoNameId, value } = action.payload;
   state.preferred[geoNameId] = value;
   return state;
@@ -126,6 +143,7 @@ export const citiesSlice = createSlice({
   },
   extraReducers: {
     [fetchCities.fulfilled.toString()]: fetchCitiesFulfilledReducer,
+    [fetchPreferred.pending.toString()]: fetchPreferredPendingReducer,
     [fetchPreferred.fulfilled.toString()]: fetchPreferredFulfilledReducer,
     [patchPreferred.fulfilled.toString()]: patchPreferredFulfilledReducer,
   },
@@ -159,7 +177,11 @@ export const cityByIndexSelector = (index: number) => (
   return rootState[sliceName].cities[geoNameId];
 };
 
-export const isPreferredSelector = (geoNameId: number) => (rootState: any) =>
-  (geoNameId && rootState[sliceName].preferred[geoNameId]) || false;
+export const isPreferredSelector = (geoNameId: number) => (
+  rootState: RootState
+) => (geoNameId && rootState[sliceName].preferred[geoNameId]) || false;
+
+export const loadingPreferredSelector = (rootState: RootState) =>
+  rootState[sliceName].loadingPreferred;
 
 // #endregion Selectors

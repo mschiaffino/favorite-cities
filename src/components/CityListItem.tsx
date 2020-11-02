@@ -7,10 +7,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Box from '@material-ui/core/Box';
 
 import {
   cityByIndexSelector,
   isPreferredSelector,
+  loadingPreferredSelector,
   patchPreferred,
 } from '../store/citiesSlice';
 
@@ -28,6 +30,7 @@ export default function CityListItem({
   const dispatch = useDispatch();
   const city = useSelector(cityByIndexSelector(index));
   const isPreferreed = useSelector(isPreferredSelector(city?.geonameid));
+  const loadingPreferred = useSelector(loadingPreferredSelector);
   const [savingChange, setSavingChange] = useState(false);
 
   const onClick = async () => {
@@ -49,12 +52,18 @@ export default function CityListItem({
       className={classes.listItem}
       onClick={onClick}
     >
-      <Checkbox checked={isPreferreed} edge="start" />
+      <Box width={42}>
+        {loadingPreferred || savingChange ? (
+          <CircularProgress size={20} />
+        ) : (
+          <Checkbox checked={isPreferreed} edge="start" />
+        )}
+      </Box>
+
       <ListItemText
         primary={city?.name || 'Loading...'}
         secondary={city ? `${city.subcountry} - ${city.country} ` : undefined}
       />
-      {savingChange && <CircularProgress />}
     </ListItem>
   );
 }
