@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import { preferredCitiesIdsSelector } from '../store/citiesSlice';
+import PreferedCitiesListItem from './PreferedCitiesListItem';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,10 +22,8 @@ export default function PreferedCitiesList() {
 
   return (
     <List component="nav" className={classes.root} aria-label="contacts">
-      {preferredCitiesIds.map((id: number) => (
-        <ListItem>
-          <ListItemText primary={id} />
-        </ListItem>
+      {preferredCitiesIds.map((id) => (
+        <PreferedCitiesListItem geoNameId={id} />
       ))}
     </List>
   );
