@@ -6,12 +6,7 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import Box from '@material-ui/core/Box';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import {
-  filterSelector,
-  totalSelector,
-  filteredResultsSelector,
-  fetchCities,
-} from '../store/citiesSlice';
+import { filterSelector, totalSelector, filteredResultsSelector, fetchCities } from '../store/citiesSlice';
 import CityListItem from './CityListItem';
 
 export default function FilteredCitiesList() {
@@ -34,11 +29,7 @@ export default function FilteredCitiesList() {
   );
 
   const isCityLoaded = (index: number) => {
-    return (
-      filteredResultsSelector &&
-      index < filteredResultsSelector.length &&
-      !!filteredResults[index]
-    );
+    return filteredResults && index < filteredResults.length && !!filteredResults[index];
   };
 
   return (
